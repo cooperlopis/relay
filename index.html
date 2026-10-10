@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Relay</title>
+  <meta name="description" content="Relay: your own team of AI assistants, on your desktop.">
+  <style>
+    :root {
+      --bg: #0c0d10;
+      --panel: #14161b;
+      --border: #23272f;
+      --text: #e8eaef;
+      --muted: #8b90a0;
+      --accent: #7c6cff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(1200px 600px at 50% -10%, rgba(124, 108, 255, 0.18), transparent 60%), var(--bg);
+      color: var(--text);
+      font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
+      min-height: 100vh;
+    }
+    main { max-width: 860px; margin: 0 auto; padding: 72px 24px 96px; }
+    .logo {
+      width: 64px; height: 64px; border-radius: 18px;
+      background: radial-gradient(circle at 35% 30%, #d9d4ff, var(--accent) 55%, #3b2fa8);
+      box-shadow: 0 0 48px rgba(124, 108, 255, 0.45);
+    }
+    h1 { font-size: 56px; letter-spacing: -0.02em; margin: 24px 0 8px; }
+    .tagline { font-size: 21px; color: var(--muted); margin: 0 0 36px; max-width: 620px; }
+    .downloads { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
+    .button {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 22px; border-radius: 12px;
+      background: var(--accent); color: #fff; text-decoration: none; font-weight: 600;
+      box-shadow: 0 8px 30px rgba(124, 108, 255, 0.35);
+    }
+    .button.secondary { background: var(--panel); border: 1px solid var(--border); box-shadow: none; }
+    .button:hover { filter: brightness(1.1); }
+    .version { color: var(--muted); font-size: 14px; margin: 0 0 56px; }
+    .notice {
+      padding: 16px 20px; border-radius: 14px; margin-bottom: 56px;
+      border: 1px solid rgba(124, 108, 255, 0.35); background: rgba(124, 108, 255, 0.08);
+    }
+    h2 { font-size: 24px; margin: 0 0 16px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-bottom: 56px; }
+    .card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; }
+    .card h3 { margin: 0 0 6px; font-size: 17px; }
+    .card p { margin: 0; color: var(--muted); font-size: 15px; }
+    ol { padding-left: 22px; margin: 0 0 24px; }
+    li { margin-bottom: 10px; }
+    li span { color: var(--muted); }
+    a { color: #b9b0ff; }
+    footer { color: var(--muted); font-size: 13px; margin-top: 64px; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="logo"></div>
+    <h1>Relay</h1>
+    <p class="tagline">Your own team of AI assistants. Chat with Relay Bot, and it runs the rest: bots for school,
+      work, and email that keep working while you're away.</p>
+
+    <div class="downloads">
+      <a class="button" id="mac" href="https://github.com/cooperlopis/relay/releases/latest">Download for Mac</a>
+      <a class="button secondary" id="windows" href="https://github.com/cooperlopis/relay/releases/latest">Download for Windows</a>
+    </div>
+    <p class="version" id="version">Mac with Apple silicon (M1 or newer) · Windows 10 or 11</p>
+
+    <div class="notice">
+      <strong>Relay is in a private test.</strong> To use it you need an invite from Cooper: an account, and access
+      to the Relay server.
+    </div>
+
+    <h2>What it does</h2>
+    <div class="grid">
+      <div class="card"><h3>A team, not a chatbot</h3><p>Relay Bot hands your requests to the right bot and sets up new ones when you need them.</p></div>
+      <div class="card"><h3>Works while you're away</h3><p>Bots check your email, follow your routines, and message each other, then tell you what they did.</p></div>
+      <div class="card"><h3>Remembers you</h3><p>A 3D map of what your bots know about you, with a profile Relay Bot keeps up to date each morning.</p></div>
+      <div class="card"><h3>Pages, calendar, apps</h3><p>Pages the bots keep current, one calendar for you and your bots, and small apps built for you.</p></div>
+    </div>
+
+    <h2>Getting started</h2>
+    <ol>
+      <li>Ask Cooper for an invite. <span>You'll get a Tailscale invite and your Relay sign-in.</span></li>
+      <li>Install <a href="https://tailscale.com/download">Tailscale</a> and accept the invite. <span>It's how Relay reaches the server privately.</span></li>
+      <li>Download Relay above and install it.
+        <span><br>Mac: open the file and drag Relay into Applications. The first time, if macOS says it can't check
+        the app, go to System Settings › Privacy &amp; Security and click Open Anyway.
+        <br>Windows: run the setup. If Windows says it protected your PC, click More info › Run anyway.</span></li>
+      <li>Open Relay and sign in.</li>
+    </ol>
+
+    <footer>Made by Cooper.</footer>
+  </main>
+  <script>
+    fetch('https://api.github.com/repos/cooperlopis/relay/releases/latest')
+      .then((response) => (response.ok ? response.json() : null))
+      .then((release) => {
+        if (!release) return
+        for (const asset of release.assets) {
+          if (asset.name.endsWith('.dmg')) document.getElementById('mac').href = asset.browser_download_url
+          if (asset.name.endsWith('.exe')) document.getElementById('windows').href = asset.browser_download_url
+        }
+        document.getElementById('version').textContent =
+          'Version ' + release.tag_name.replace(/^v/, '') + ' · Mac with Apple silicon (M1 or newer) · Windows 10 or 11'
+      })
+      .catch(() => {})
+  </script>
+</body>
+</html>
