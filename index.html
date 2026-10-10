@@ -64,10 +64,12 @@
       work, and email that keep working while you're away.</p>
 
     <div class="downloads">
-      <a class="button" id="mac" href="https://github.com/cooperlopis/relay/releases/latest">Download for Mac</a>
-      <a class="button secondary" id="windows" href="https://github.com/cooperlopis/relay/releases/latest">Download for Windows</a>
+      <a class="button" id="mac" href="https://github.com/cooperlopis/relay/releases/latest">Mac (Apple silicon)</a>
+      <a class="button secondary" id="mac-intel" href="https://github.com/cooperlopis/relay/releases/latest">Mac (Intel)</a>
+      <a class="button secondary" id="windows" href="https://github.com/cooperlopis/relay/releases/latest">Windows</a>
     </div>
-    <p class="version" id="version">Mac with Apple silicon (M1 or newer) · Windows 10 or 11</p>
+    <p class="version"><span id="version">Apple silicon (M1 or newer) · Intel Mac with macOS 12 or newer · Windows 10 or 11</span>
+      <br>Not sure which Mac you have? Apple menu › About This Mac: "Chip: Apple M…" is Apple silicon, "Processor: … Intel" is Intel.</p>
 
     <div class="notice">
       <strong>Relay is in a private test.</strong> To use it you need an invite: a Relay account.
@@ -97,11 +99,13 @@
       .then((release) => {
         if (!release) return
         for (const asset of release.assets) {
-          if (asset.name.endsWith('.dmg')) document.getElementById('mac').href = asset.browser_download_url
+          if (asset.name.endsWith('-arm64.dmg')) document.getElementById('mac').href = asset.browser_download_url
+          if (asset.name.endsWith('-x64.dmg')) document.getElementById('mac-intel').href = asset.browser_download_url
           if (asset.name.endsWith('.exe')) document.getElementById('windows').href = asset.browser_download_url
         }
         document.getElementById('version').textContent =
-          'Version ' + release.tag_name.replace(/^v/, '') + ' · Mac with Apple silicon (M1 or newer) · Windows 10 or 11'
+          'Version ' + release.tag_name.replace(/^v/, '') +
+          ' · Apple silicon (M1 or newer) · Intel Mac with macOS 12 or newer · Windows 10 or 11'
       })
       .catch(() => {})
   </script>
